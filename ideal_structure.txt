@@ -1,0 +1,26 @@
+object_detection_pipeline/
+│── configs/               # Конфиги с параметрами моделей
+│   ├── yolo.yaml
+│   ├── faster_rcnn.yaml
+│── data/                  # Данные
+│   ├── images/
+│   ├── annotations/
+│── datasets/              # Поддержка разных форматов данных
+│   ├── coco_dataset.py
+│   ├── voc_dataset.py
+│   ├── yolo_dataset.py
+│── models/                # Разные модели
+│   ├── yolo.py
+│   ├── faster_rcnn.py
+│   ├── detr.py
+│── training/              # Код обучения
+│   ├── train.py
+│   ├── losses.py
+│   ├── utils.py
+│── inference/             # Инференс и тестирование
+│   ├── predict.py
+│── logs/                  # Логи обучения (TensorBoard)
+│── checkpoints/           # Сохраненные модели
+│── main.py                # Главный скрипт запуска
+│── requirements.txt       # Зависимости
+│── README.md              # Описание
