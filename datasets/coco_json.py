@@ -3,7 +3,7 @@ import json
 import torch
 from PIL import Image
 import torchvision.transforms as T
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader, random_split
 
 class CocoDataset(Dataset):
     def __init__(self, images_dir, annotations_file, transforms=None):
@@ -68,4 +68,22 @@ def collate_fn(batch):
         targets.append(target)
 
     return torch.stack(images), targets
+
+
+
+
+# Пути
+images_dir = r"path"
+annotations_file = r"path"
+
+
+dataset = CocoDataset(images_dir, annotations_file)
+
+train_size = int(0.8 * len(dataset))
+val_size = len(dataset) - train_size
+
+train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
+
+train_loader = DataLoader(train_dataset, batch_size=4, shuffle=True, collate_fn=collate_fn)
+val_loader = DataLoader(val_dataset, batch_size=4, shuffle=False, collate_fn=collate_fn)
 
