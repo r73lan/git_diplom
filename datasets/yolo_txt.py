@@ -1,7 +1,8 @@
 import os
-import cv2
 import torch
 from torch.utils.data import Dataset
+from PIL import Image
+import torchvision.transforms as T
 
 
 class YOLODataset(Dataset):
@@ -18,9 +19,9 @@ class YOLODataset(Dataset):
         img_name = self.images[idx]
         img_path = os.path.join(self.images_dir, img_name)
         label_path = os.path.join(self.labels_dir, img_name.replace('.jpg', '.txt').replace('.png', '.txt'))
-
-        image = cv2.imread(img_path)
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        
+        image = Image.open(img_path).convert("RGB")
+        image = T.ToTensor()(image)
         height, width = image.shape[:2]
 
         boxes = []
@@ -28,7 +29,11 @@ class YOLODataset(Dataset):
 
         if os.path.exists(label_path):
             with open(label_path, 'r') as f:
+                parts = line.strip().split()
                 for line in f:
+                    if len(parts) != 5:
+                        print(f"Warning: incorrect label format in {label_path}: {line.strip()}")
+                        continue
                     cls, x_center, y_center, w, h = map(float, line.strip().split())
 
                     x_min = (x_center - w / 2) * width
